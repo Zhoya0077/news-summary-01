@@ -5,16 +5,22 @@ written by the agent that built this entry. The program runs with no network.
 """
 import os
 
-HERE = os.path.dirname(os.path.abspath(__file__))
-OUT = os.environ.get("MAKEFUN_OUTPUT_DIR", "/output")
 
-with open(os.path.join(HERE, "summary.txt"), encoding="utf-8") as f:
-    text = f.read()
+def main():
+    here = os.path.dirname(os.path.abspath(__file__))
+    out = os.environ.get("MAKEFUN_OUTPUT_DIR", "/output")
 
-# The gate: UTF-8, 1 to 2,000 Unicode code points, at least one non-whitespace char.
-if not 1 <= len(text) <= 2000 or not any(not c.isspace() for c in text):
-    raise SystemExit("summary.txt fails the gate (must be 1-2000 chars, non-blank)")
+    with open(os.path.join(here, "summary.txt"), encoding="utf-8") as f:
+        text = f.read()
 
-os.makedirs(OUT, exist_ok=True)
-with open(os.path.join(OUT, "entry.txt"), "w", encoding="utf-8") as f:
-    f.write(text)
+    # The gate: UTF-8, 1 to 2,000 Unicode code points, at least one non-whitespace char.
+    if not 1 <= len(text) <= 2000 or not any(not c.isspace() for c in text):
+        raise SystemExit("summary.txt fails the gate (must be 1-2000 chars, non-blank)")
+
+    os.makedirs(out, exist_ok=True)
+    with open(os.path.join(out, "entry.txt"), "w", encoding="utf-8") as f:
+        f.write(text)
+
+
+if __name__ == "__main__":
+    main()
